@@ -1,6 +1,6 @@
 type ButtonProps = {
     label: string;
-    type: 'button' | 'submit';
+    type?: 'button' | 'submit' | 'reset';
   };
   
   export default function Button({ label, type }: ButtonProps) {

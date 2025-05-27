@@ -5,6 +5,7 @@ import "/src/App.css"
 
 interface InputFieldProps {
   type: string;
+  name: string;
   //If value is a int or float, we need to parse it. 
   placeholder?: string;
   value: string;

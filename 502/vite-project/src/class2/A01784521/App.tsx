@@ -98,7 +98,7 @@ function InputField({ type, placeholder, value, onChange, label }: InputFieldPro
 // Button Component with Props
 interface ButtonProps {
   label: string;
-  type?: "button" | "submit" | "reset";
+  type?: 'button' | 'submit' | 'reset';
   variant: string;
   onClick?: () => void;
   fullWidth?: boolean;
@@ -201,7 +201,7 @@ interface GreetingProps {
   name: string;
 }
 
-function Greeting({ name }: GreetingProps) {
+function Greeting({ /*name*/ }: GreetingProps) {
   return <h1 style={styles.header}>React Components Workshop: Props & Composition</h1>;
 }
 

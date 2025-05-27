@@ -1,4 +1,4 @@
-import { useState, useEffect, useReducer, FormEvent } from 'react';
+import { useState, useReducer, FormEvent } from 'react';
 
 // Styles for components
 const styles = {

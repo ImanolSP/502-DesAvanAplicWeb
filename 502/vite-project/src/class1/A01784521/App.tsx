@@ -97,8 +97,8 @@ function App() {
   
   // Destructuring examples
   const { name, age, contact, skills } = userData;
-  const { email, phone } = contact;
-  const [primarySkill, secondarySkill] = skills;
+  const { email, /*phone*/ } = contact;
+  const [primarySkill, /*secondarySkill*/] = skills;
   
   // Traditional function with this binding issue
   function traditionalGreet() {

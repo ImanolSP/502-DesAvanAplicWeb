@@ -1,4 +1,4 @@
-function App(){
+export default function App(){
     return(
         <>
         <a href="/src/class1/A01781321">

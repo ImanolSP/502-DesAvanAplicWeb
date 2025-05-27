@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react';
+import /*React*/ { useState, FormEvent } from 'react';
 
 function App() {
     const [username, setUsername] = useState<string>('');

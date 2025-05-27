@@ -5,6 +5,7 @@ import "/src/App.css"
 
 interface ButtonProps {
   label: string;
+  type?: 'button' | 'submit' | 'reset';
   onClick: () => void;
 }
 

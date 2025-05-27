@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import /*React,*/ { useState } from 'react';
 
 function App() {
   const [buttonText, setButtonText] = useState('Haz clic');

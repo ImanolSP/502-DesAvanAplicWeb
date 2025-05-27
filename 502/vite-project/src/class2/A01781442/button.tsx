@@ -2,6 +2,7 @@ import React from 'react';
 
 type ButtonProps = {
   label: string;
+  type?: 'button' | 'submit' | 'reset';
   onClick: () => void;
 };
 

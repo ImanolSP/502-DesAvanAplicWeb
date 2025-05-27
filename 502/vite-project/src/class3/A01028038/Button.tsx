@@ -1,5 +1,5 @@
 interface ButtonProps {
-    type: "submit" | "button" | "reset";
+    type?: 'button' | 'submit' | 'reset';
     label: string;
   }
 

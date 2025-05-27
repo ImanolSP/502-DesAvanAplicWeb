@@ -1,7 +1,9 @@
 // src/components/LoginPage.tsx
 import React, { useState } from "react";
-
-const LoginPage: React.FC = () => {
+type LoginPageProps = {
+  onLogin?: () => void; // 👈 Optional callback prop
+};
+const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -14,6 +16,7 @@ const LoginPage: React.FC = () => {
 
     if (username === "admin" && password === "password") {
       setSuccess("Login successful");
+      if (onLogin) onLogin();
     } else {
       setError("Invalid username or password");
     }

@@ -3,6 +3,7 @@ import '../../class1/A01025119/webpage/main_design.css';
 
 interface ButtonProps {
   label: string;
+  type?: 'button' | 'submit' | 'reset';
   onClick: () => void;
 }
 

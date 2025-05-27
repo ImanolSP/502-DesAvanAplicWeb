@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import LoginPage from '../../../class6/A01783704/LogInPage'; 
+import LoginPage from '../../../class6/A01783704/LoginPage'; 
 import TravelRequestForm from './TravelRequestForm'
 
 const App: React.FC = () => {

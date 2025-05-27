@@ -5,7 +5,8 @@ import "/src/App.css"
 
 interface ButtonProps {
   label: string;
-  onClick: () => void;
+  type?: 'button' | 'submit' | 'reset';
+  onClick?: () => void;
 }
 
 const Button: React.FC<ButtonProps> = ({ label, onClick }) => {

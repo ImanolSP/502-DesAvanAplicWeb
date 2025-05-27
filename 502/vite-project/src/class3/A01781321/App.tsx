@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from "react";
+import /*React*/ { useState, /*FormEvent*/ } from "react";
 import {Login2, Dashboard} from './components'
 
 const App = () => {
