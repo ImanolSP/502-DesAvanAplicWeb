@@ -1,7 +1,9 @@
+//server.ts
+
 import { WebSocketServer, WebSocket } from 'ws';
 
-const wss = new WebSocketServer({ port: 8080 });
-
+const PORT = parseInt(process.env.PORT ?? '8080', 10);
+const wss = new WebSocketServer({ port: PORT, host: '0.0.0.0'  });
 wss.on('connection', (ws: WebSocket) => {
   console.log('🔌 Client connected');
 
@@ -21,4 +23,4 @@ wss.on('connection', (ws: WebSocket) => {
   });
 });
 
-console.log('✅ WebSocket server running on ws://localhost:8080');
+console.log('✅ WebSocket server running on ws://IP:8080');

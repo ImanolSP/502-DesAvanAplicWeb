@@ -3,39 +3,45 @@ import { useEffect, useRef, useState } from 'react';
 function App() {
   const socketRef = useRef<WebSocket | null>(null);
   const [input, setInput] = useState('');
-  const [sentMessages, setSentMessages] = useState<string[]>([]);
-  const [receivedMessages, setReceivedMessages] = useState<string[]>([]);
+  const [sent, setSent] = useState<string[]>([]);
+  const [received, setReceived] = useState<string[]>([]);
 
   useEffect(() => {
-    // Connect to the WebSocket server
-    socketRef.current = new WebSocket('ws://localhost:8080');
+    // Pick the right protocol/host and path
+    const proto = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    const wsUrl = `${proto}://${window.location.host}/ws/`;
 
-    socketRef.current.onopen = () => {
-      console.log('✅ WebSocket connected');
+    const connect = () => {
+      const ws = new WebSocket(wsUrl);
+      socketRef.current = ws;
+
+      ws.onopen = () => console.log('✅ WebSocket connected');
+
+      ws.onmessage = event =>
+        setReceived(prev => [...prev, event.data as string]);
+
+      ws.onerror = event => console.error('❌ WebSocket error', event);
+
+      ws.onclose = event => {
+        console.log('🔌 WebSocket closed', event.code);
+        socketRef.current = null;
+
+        // Auto-reconnect (5 s timeout), ignore if component unmounted
+        if (!event.wasClean) {
+          setTimeout(() => socketRef.current || connect(), 5_000);
+        }
+      };
     };
 
-    socketRef.current.onmessage = (event: MessageEvent) => {
-      console.log('📨 Message from server:', event.data);
-      setReceivedMessages(prev => [...prev, event.data]);
-    };
-
-    socketRef.current.onerror = (event: Event) => {
-      console.error('❌ WebSocket error:', event);
-    };
-
-    socketRef.current.onclose = () => {
-      console.log('🔌 WebSocket closed');
-    };
-
-    return () => {
-      socketRef.current?.close();
-    };
+    connect();
+    return () => socketRef.current?.close();
   }, []);
 
-  const sendMessage = () => {
-    if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN && input.trim()) {
-      socketRef.current.send(input);
-      setSentMessages(prev => [...prev, input]);
+  const send = () => {
+    const ws = socketRef.current;
+    if (ws?.readyState === WebSocket.OPEN && input.trim()) {
+      ws.send(input);
+      setSent(prev => [...prev, input]);
       setInput('');
     }
   };
@@ -46,31 +52,12 @@ function App() {
 
       <div className="grid grid-cols-2 gap-6">
         {/* Sent Messages */}
-        <div>
-          <h2 className="text-lg font-semibold mb-2 text-blue-700">You</h2>
-          <div className="border rounded bg-blue-50 p-4 h-64 overflow-y-auto">
-            {sentMessages.map((msg, idx) => (
-              <div key={idx} className="mb-1 text-blue-900 text-sm">
-                {msg}
-              </div>
-            ))}
-          </div>
-        </div>
+        <MessagePanel title="You" color="blue" messages={sent} />
 
         {/* Received Messages */}
-        <div>
-          <h2 className="text-lg font-semibold mb-2 text-gray-700">Server</h2>
-          <div className="border rounded bg-gray-100 p-4 h-64 overflow-y-auto">
-            {receivedMessages.map((msg, idx) => (
-              <div key={idx} className="mb-1 text-gray-800 text-sm">
-                {msg}
-              </div>
-            ))}
-          </div>
-        </div>
+        <MessagePanel title="Server" color="gray" messages={received} />
       </div>
 
-      {/* Message Input */}
       <div className="flex space-x-3">
         <input
           type="text"
@@ -80,11 +67,38 @@ function App() {
           className="flex-1 border p-2 rounded"
         />
         <button
-          onClick={sendMessage}
+          onClick={send}
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
         >
           Send
         </button>
+      </div>
+    </div>
+  );
+}
+
+/** Re-usable panel component */
+function MessagePanel({
+  title,
+  color,
+  messages,
+}: {
+  title: string;
+  color: 'blue' | 'gray';
+  messages: string[];
+}) {
+  const bg = color === 'blue' ? 'bg-blue-50' : 'bg-gray-100';
+  const text = color === 'blue' ? 'text-blue-900' : 'text-gray-800';
+
+  return (
+    <div>
+      <h2 className={`text-lg font-semibold mb-2 text-${color}-700`}>{title}</h2>
+      <div className={`border rounded ${bg} p-4 h-64 overflow-y-auto`}>
+        {messages.map((msg, idx) => (
+          <div key={idx} className={`mb-1 ${text} text-sm`}>
+            {msg}
+          </div>
+        ))}
       </div>
     </div>
   );
